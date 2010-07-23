@@ -1,7 +1,7 @@
 class FacebookGraphFilters {
 	
 	// Injected by grails
-	def facebookService
+	def facebookGraphService
 	def grailsApplication
 	
 	def filters = {
@@ -25,7 +25,7 @@ class FacebookGraphFilters {
 						session.facebook[pair[0]] = pair[1].decodeURL()
 					}
 					
-					session.facebook = facebookService.validateSession(session.facebook)
+					session.facebook = facebookGraphService.validateSession(session.facebook)
 				}
 			}
 		}
