@@ -1,4 +1,4 @@
-class FacebookFilters {
+class FacebookGraphFilters {
 	
 	// Injected by grails
 	def facebookService
