@@ -17,7 +17,7 @@ class FacebookGraphTagLib {
 			out << "<script type=\"text/javascript\" src=\"http://connect.facebook.net/${locale}/all.js\"></script>"
 			
 			out << "<script type=\"text/javascript\">"
-			out << "FB.init({appId: '${grailsApplication.config.facebook.applicationId}', status:true, cookie: true, xfbml: true});"
+			out << "FB.init({appId: '${grailsApplication.config.facebook.applicationId}', status:${attrs.status?:true}, cookie:${attrs.cookie?:true}, xfbml:${attrs.xfbml?:true}});"
 			out << "</script>"
 		}
 	}
