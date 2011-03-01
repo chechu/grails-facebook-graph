@@ -83,13 +83,16 @@ class FacebookGraphService {
 	}
 	
 	/**
-	 * This method publishes the message passed as parameter in the
-	 * wall of the session user. If the session user hasn't associated 
+	 * This method publishes the params passed as parameter in the
+	 * wall of the session user. If the session user hasn't associated
 	 * a facebook session this method returns null.
 	 * 
-	 * @param message The message to publish
+	 * Thanks to mshirman.
+	 * 
+	 * @param params The map of params to publish. For instance
+	 * message, picture, link, name, caption, description
 	 */
-	def publishWall(message) {
+	def publishWall(params = [:]) {
 		def result
 		def facebookData = getFacebookData()
 		
@@ -97,13 +100,24 @@ class FacebookGraphService {
 		
 		if(facebookData) {
 			try {
-				result = api("/me/feed", facebookData, [message:message], 'POST')
+				result = api("/me/feed", facebookData, params, 'POST')
 			} catch (Exception e) {
 				log.error(e)
 			}
 		}
 		
 		return result
+	}
+	
+	/**
+	 * This method publishes the message passed as parameter in the
+	 * wall of the session user. If the session user hasn't associated 
+	 * a facebook session this method returns null.
+	 * 
+	 * @param message The message to publish
+	 */
+	def publishWall(String message) {
+		return publishWall(message:message)
 	}
 	
 	/**
