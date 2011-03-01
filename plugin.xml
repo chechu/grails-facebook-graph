@@ -1,4 +1,4 @@
-<plugin name='facebook-graph' version='0.4' grailsVersion='1.3.3 &gt; *'>
+<plugin name='facebook-graph' version='0.5' grailsVersion='1.3.3 &gt; *'>
   <author>Jesus Lanchas</author>
   <authorEmail>jesus.lanchas@daureos.com</authorEmail>
   <title>Facebook graph plugin</title>
