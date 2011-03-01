@@ -6,7 +6,7 @@ class FacebookGraphTagLib {
 	static namespace = "fbg"
 	
 	def resources = {attrs, body ->
-		def locale = attrs.locale || RCU.getLocale(request)
+		def locale = attrs.locale ?: RCU.getLocale(request)
 		if(!locale) locale = Locale.getDefault()
 
 		if(!grailsApplication.config.facebook.applicationId) {
