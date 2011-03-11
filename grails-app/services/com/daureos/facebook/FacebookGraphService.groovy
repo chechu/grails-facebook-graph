@@ -76,7 +76,7 @@ class FacebookGraphService {
 	 */
 	def getFacebookProfile(params = [:]) {
 		def result
-		def facebookData = getFacebookData()
+		def facebookData = params.facebookData ?: getFacebookData()
 
 		applyDefaults(params)
 
@@ -105,7 +105,7 @@ class FacebookGraphService {
 	 */
 	def publishWall(params = [:]) {
 		def result
-		def facebookData = getFacebookData()
+		def facebookData = params.facebookData ?: getFacebookData()
 
 		applyDefaults(params)
 
@@ -139,7 +139,7 @@ class FacebookGraphService {
 	 */
 	def getFriends(def params = [:]) {
 		def result
-		def facebookData = getFacebookData()
+		def facebookData = params.facebookData ?: getFacebookData()
 
 		applyDefaults(params)
 
