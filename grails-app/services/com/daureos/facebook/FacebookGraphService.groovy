@@ -59,21 +59,23 @@ class FacebookGraphService {
 		
 		return result
 	}
-	
+
 	/**
 	 * This method returns the information stored by Facebook of the session user.
 	 * If the session user hasn't associated a facebook session this method returns
 	 * null.
 	 */
-	def getFacebookProfile() {
+	def getFacebookProfile(params = [:]) {
 		def result
 		def facebookData = getFacebookData()
-		
+
+		applyDefaults(params)
+
 		log.debug("Facebook data: ${facebookData}")
 		
 		if(facebookData) {
 			try {
-				result = api("/me", facebookData)
+				result = api("/${params.id}", facebookData)
 			} catch (Exception e) {
 				log.error(e.message)
 			}
@@ -95,12 +97,14 @@ class FacebookGraphService {
 	def publishWall(params = [:]) {
 		def result
 		def facebookData = getFacebookData()
-		
+
+		applyDefaults(params)
+
 		log.debug("Facebook data: ${facebookData}")
 		
 		if(facebookData) {
 			try {
-				result = api("/me/feed", facebookData, params, 'POST')
+				result = api("/${params.id}/feed", facebookData, params, 'POST')
 			} catch (Exception e) {
 				log.error(e)
 			}
@@ -124,15 +128,17 @@ class FacebookGraphService {
 	 * This method returns the list of friends in Facebook of the session user.
 	 * If the session user hasn't associated a facebook session this method returns null.
 	 */
-	def getFriends() {
+	def getFriends(def params = [:]) {
 		def result
 		def facebookData = getFacebookData()
-		
+
+		applyDefaults(params)
+
 		log.debug("Facebook data: ${facebookData}")
 		
 		if(facebookData) {
 			try {
-				result = api("/me/friends", facebookData)
+				result = api("/${params.id}/friends", facebookData)
 			} catch (Exception e) {
 				log.error(e)
 			}
@@ -304,7 +310,14 @@ class FacebookGraphService {
 		
 		return DigestUtils.md5Hex(base)
 	}
-	
+
+	/**
+	 * Apply default values to parameters that were not given
+	 */
+	private def applyDefaults(def params) {
+		params.id = params.id ?: "me"
+	}
+
 	/**
 	 * This method set null to the facebookData attribute stored in the
 	 * session object associated with the session user.
