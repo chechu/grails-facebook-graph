@@ -151,7 +151,29 @@ class FacebookGraphService {
 	def publishWall(String message) {
 		return publishWall(message:message)
 	}
-	
+
+	/**
+	 * This method returns the list of events in Facebook of the user with the given
+	 * ID or the current session user if no ID is given.
+	 * If the session user hasn't associated a facebook session this method returns null.
+	 */
+	def getEvents(params = [:]) {
+		def result
+		applyDefaults(params)
+
+		log.debug("Facebook data: ${params.facebookData}")
+
+		if(params.facebookData) {
+			try {
+				result = api("/${params.id}/events", params.facebookData)
+			} catch (Exception e) {
+				log.error(e)
+			}
+		}
+
+		return result
+	}
+
 	/**
 	 * This method returns the list of friends in Facebook of the session user.
 	 * If the session user hasn't associated a facebook session this method returns null.
