@@ -90,7 +90,30 @@ class FacebookGraphService {
 		
 		return result
 	}
-	
+
+	/**
+	 * This method returns the information stored by Facebook of the object with the
+	 * given ID. If no ID is given, the information of the current session user is returned.
+	 * If the session user hasn't associated a facebook session this method returns
+	 * null.
+	 */
+	def getDetails(params = [:]) {
+		def result
+		applyDefaults(params)
+
+		log.debug("Facebook data: ${params.facebookData}")
+
+		if(params.facebookData) {
+			try {
+				result = api("/${params.id}", params.facebookData)
+			} catch (Exception e) {
+				log.error(e.message)
+			}
+		}
+
+		return result
+	}
+
 	/**
 	 * This method publishes the params passed as parameter in the
 	 * wall of the session user. If the session user hasn't associated
@@ -133,7 +156,7 @@ class FacebookGraphService {
 	 * This method returns the list of friends in Facebook of the session user.
 	 * If the session user hasn't associated a facebook session this method returns null.
 	 */
-	def getFriends(def params = [:]) {
+	def getFriends(params = [:]) {
 		def result
 		applyDefaults(params)
 
@@ -317,7 +340,7 @@ class FacebookGraphService {
 	/**
 	 * Apply default values to parameters that were not given
 	 */
-	private def applyDefaults(def params) {
+	private def applyDefaults(params) {
 		params.id = params.id ?: "me"
 		params.facebookData = params.facebookData ?: getFacebookData()
 	}
