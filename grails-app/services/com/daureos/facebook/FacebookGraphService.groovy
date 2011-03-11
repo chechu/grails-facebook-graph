@@ -61,6 +61,15 @@ class FacebookGraphService {
 	}
 
 	/**
+	 * This method returns the facebookData stored in the session
+	 * associated with the user
+	 */
+	def getFacebookData() {
+		def session = RequestContextHolder.currentRequestAttributes().getSession()
+		return session?.facebook
+	}
+
+	/**
 	 * This method returns the information stored by Facebook of the session user.
 	 * If the session user hasn't associated a facebook session this method returns
 	 * null.
@@ -325,14 +334,5 @@ class FacebookGraphService {
 	private void invalidateFacebookData() {
 		def session = RequestContextHolder.currentRequestAttributes().getSession()
 		if(session) session.facebookData = null
-	}
-	
-	/**
-	 * This method returns the facebookData stored in the session 
-	 * associated with the user
-	 */
-	private def getFacebookData() {
-		def session = RequestContextHolder.currentRequestAttributes().getSession()
-		return session?.facebook
 	}
 }
