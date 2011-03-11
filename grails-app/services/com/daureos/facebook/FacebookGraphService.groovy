@@ -76,15 +76,13 @@ class FacebookGraphService {
 	 */
 	def getFacebookProfile(params = [:]) {
 		def result
-		def facebookData = params.facebookData ?: getFacebookData()
-
 		applyDefaults(params)
 
-		log.debug("Facebook data: ${facebookData}")
+		log.debug("Facebook data: ${params.facebookData}")
 		
-		if(facebookData) {
+		if(params.facebookData) {
 			try {
-				result = api("/${params.id}", facebookData)
+				result = api("/${params.id}", params.facebookData)
 			} catch (Exception e) {
 				log.error(e.message)
 			}
@@ -105,15 +103,13 @@ class FacebookGraphService {
 	 */
 	def publishWall(params = [:]) {
 		def result
-		def facebookData = params.facebookData ?: getFacebookData()
-
 		applyDefaults(params)
 
-		log.debug("Facebook data: ${facebookData}")
+		log.debug("Facebook data: ${params.facebookData}")
 		
-		if(facebookData) {
+		if(params.facebookData) {
 			try {
-				result = api("/${params.id}/feed", facebookData, params, 'POST')
+				result = api("/${params.id}/feed", params.facebookData, params, 'POST')
 			} catch (Exception e) {
 				log.error(e)
 			}
@@ -139,15 +135,13 @@ class FacebookGraphService {
 	 */
 	def getFriends(def params = [:]) {
 		def result
-		def facebookData = params.facebookData ?: getFacebookData()
-
 		applyDefaults(params)
 
-		log.debug("Facebook data: ${facebookData}")
+		log.debug("Facebook data: ${params.facebookData}")
 		
-		if(facebookData) {
+		if(params.facebookData) {
 			try {
-				result = api("/${params.id}/friends", facebookData)
+				result = api("/${params.id}/friends", params.facebookData)
 			} catch (Exception e) {
 				log.error(e)
 			}
@@ -325,6 +319,7 @@ class FacebookGraphService {
 	 */
 	private def applyDefaults(def params) {
 		params.id = params.id ?: "me"
+		params.facebookData = params.facebookData ?: getFacebookData()
 	}
 
 	/**
