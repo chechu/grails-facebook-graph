@@ -6,6 +6,7 @@ class FacebookGraphTagLib {
 	static namespace = "fbg"
 	
 	def resources = {attrs, body ->
+		def protocol
 		def locale = attrs.locale ?: RCU.getLocale(request)
 		if(!locale) locale = Locale.getDefault()
 
@@ -13,8 +14,10 @@ class FacebookGraphTagLib {
 			log.error("facebook.applicationId not defined in the Config.groovy!")
 		} else {
 		
+			protocol = grailsApplication.config.facebook.secure ? 'https' : 'http'
+			
 			out << "<div id= \"fb-root\"></div>"
-			out << "<script type=\"text/javascript\" src=\"http://connect.facebook.net/${locale}/all.js\"></script>"
+			out << "<script type=\"text/javascript\" src=\"${protocol}://connect.facebook.net/${locale}/all.js\"></script>"
 			
 			out << "<script type=\"text/javascript\">"
 			out << "FB.init({appId: '${grailsApplication.config.facebook.applicationId}', status:${attrs.status?:true}, cookie:${attrs.cookie?:true}, xfbml:${attrs.xfbml?:true}});"
