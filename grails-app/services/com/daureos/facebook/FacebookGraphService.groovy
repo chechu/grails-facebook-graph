@@ -24,7 +24,8 @@ class FacebookGraphService {
 		api:'https://api.facebook.com/',
 		api_read:'https://api-read.facebook.com/',
 		graph:'https://graph.facebook.com/',
-		www:'https://www.facebook.com/']
+		www:'https://www.facebook.com/',
+	]
 
 		
 	/**
@@ -239,6 +240,45 @@ class FacebookGraphService {
 	}
 
 	/**
+	 * Invoke the FQL multiquery interface.
+	 *
+	 * @param String $queries a map of FQL queries (required)
+	 * @param String $method the http method (default 'GET')
+	 * @param Array $params the query/post data
+	 * @return the decoded response object
+	 * @throws FacebookGraphException
+	 */
+	def fqlMultiQuery(queries, params = [:], method = 'GET') {
+		def exception
+		def result
+		def facebookData = params.facebookData ?: getFacebookData()
+		params.method = method
+		params.queries = (queries as JSON).toString() // encode queries as JSON dictionary
+		params.format = "JSON"
+
+		if (facebookData) { // without a facebook session we'll return null
+			result = oauthRequest(getUrl('api_read', 'method/fql.multiquery'), params, facebookData)
+			if (!result) throw new FacebookGraphException()
+			else result = JSON.parse(result)
+
+			log.debug("Result: ${result}")
+
+			// results are returned, errors are thrown
+			// the JSON for some reason returns [null] for every unset property
+			if (result.error_msg && result.error_msg.class.equals(String)) {
+				result.error = [message: result.error_msg]
+				exception = new FacebookGraphException(result)
+				if (exception.type == 'OAuthException') {
+					invalidateFacebookData()
+				}
+				throw exception
+			}
+		}
+
+		return result
+	}
+
+	/**
 	 * Make a OAuth Request
 	 *
 	 * @param path the path (required)
@@ -275,7 +315,9 @@ class FacebookGraphService {
 		// Encoding the params...
 		if (params) {
 			params.each{k,v->
-				encodedParams += k.encodeAsURL() + '=' + v.encodeAsURL() + '&'
+				if (k != 'method') {
+					encodedParams += k.encodeAsURL() + '=' + v.encodeAsURL() + '&'
+				}
 			}
 			encodedParams = encodedParams[0..-2]
 		}
