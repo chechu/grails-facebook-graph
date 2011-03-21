@@ -24,7 +24,7 @@ class FacebookGraphService {
 		api:'https://api.facebook.com/',
 		api_read:'https://api-read.facebook.com/',
 		graph:'https://graph.facebook.com/',
-		www:'https://www.facebook.com/',
+		www:'https://www.facebook.com/'
 	]
 
 		
