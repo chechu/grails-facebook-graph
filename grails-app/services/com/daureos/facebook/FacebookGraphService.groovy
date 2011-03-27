@@ -314,8 +314,8 @@ class FacebookGraphService {
 		
 		// Encoding the params...
 		if (params) {
-			params.each{k,v->
-				if (k != 'method') {
+			params.each{k,v ->
+				if(k != 'method' && k != 'id') {
 					encodedParams += k.encodeAsURL() + '=' + v.encodeAsURL() + '&'
 				}
 			}
