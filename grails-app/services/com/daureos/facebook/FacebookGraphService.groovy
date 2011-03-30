@@ -106,7 +106,7 @@ class FacebookGraphService {
 
 		if(params.facebookData) {
 			try {
-				result = api("/${params.id}", params.facebookData)
+				result = api("/${params.id}", params.facebookData, params)
 			} catch (Exception e) {
 				log.error(e.message)
 			}
