@@ -16,7 +16,7 @@ class FacebookGraphTagLib {
 		
 			protocol = grailsApplication.config.facebook.secure ? 'https' : 'http'
 			
-			out << "<div id= \"fb-root\"></div>"
+			out << "<div id=\"fb-root\"></div>"
 			out << "<script type=\"text/javascript\" src=\"${protocol}://connect.facebook.net/${locale}/all.js\"></script>"
 			
 			out << "<script type=\"text/javascript\">"
