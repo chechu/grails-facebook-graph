@@ -166,7 +166,7 @@ class FacebookGraphService {
 
 		if(params.facebookData) {
 			try {
-				result = api("/${params.id}/events", params.facebookData)
+				result = api("/${params.id}/events", params.facebookData, params)
 			} catch (Exception e) {
 				log.error(e)
 			}
@@ -187,7 +187,7 @@ class FacebookGraphService {
 		
 		if(params.facebookData) {
 			try {
-				result = api("/${params.id}/friends", params.facebookData)
+				result = api("/${params.id}/friends", params.facebookData, params)
 			} catch (Exception e) {
 				log.error(e)
 			}
