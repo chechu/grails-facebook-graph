@@ -20,12 +20,13 @@ class FacebookGraphFilters {
 				
 				session.facebook = [:] // Without cookie we remove the session data
 				if(cookie) {
+                    def facebook = [:] // Don't write to session directly as that may cause NullPointerExceptions
 					cookie.value.split("&").each{
 						pair = it.split("=")
-						session.facebook[pair[0]] = pair[1].decodeURL()
+						facebook[pair[0]] = pair[1].decodeURL()
 					}
 					
-					session.facebook = facebookGraphService.validateSession(session.facebook)
+					session.facebook = facebookGraphService.validateSession(facebook)
 				}
 			}
 		}
