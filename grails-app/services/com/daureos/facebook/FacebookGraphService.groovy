@@ -221,7 +221,9 @@ class FacebookGraphService {
 
 		if(facebookData) { // without a facebook session we'll return null
 			result = oauthRequest(getUrl('graph', path), params, facebookData)
-			if(!result) throw new FacebookGraphException()
+			if(!result) {
+              throw new FacebookGraphException()
+            }
 			else result = JSON.parse(result)
 			
 			log.debug("Result: ${result}")
@@ -321,35 +323,31 @@ class FacebookGraphService {
 			}
 			encodedParams = encodedParams[0..-2]
 		}
-		
-		try {
-			// Making the request
-			switch(params.method) {
-				case "GET":
-					if(encodedParams) urlAsString += '?' + encodedParams
-					url = new URL(urlAsString)
-					resp = url.text
-				break;
-				case "POST":
-					url = new URL(urlAsString)
-					connection = url.openConnection()
-					connection.setRequestMethod("POST")
-					connection.doOutput = true
-					
-					writer = new OutputStreamWriter(connection.outputStream)
-					writer.write(encodedParams)
-					writer.flush()
-					writer.close()
-					connection.connect()
-					
-					if (connection.responseCode == 200 || connection.responseCode == 201)
-						resp = connection.content.text
-	
-				break;
-			}
-		} catch(Exception e) {
-			// resp will be null, nothing to do...
-			log.error(e)
+
+		// Making the request
+		switch(params.method) {
+			case "GET":
+				if(encodedParams) urlAsString += '?' + encodedParams
+				url = new URL(urlAsString)
+				resp = url.text
+			break;
+			case "POST":
+				url = new URL(urlAsString)
+				connection = url.openConnection()
+				connection.setRequestMethod("POST")
+				connection.doOutput = true
+
+				writer = new OutputStreamWriter(connection.outputStream)
+				writer.write(encodedParams)
+				writer.flush()
+				writer.close()
+				connection.connect()
+
+				if (connection.responseCode == 200 || connection.responseCode == 201)
+					resp = connection.content.text
+				else
+				  throw new FacebookGraphException(connection.content.text)
+			break;
 		}
 
 		return resp
