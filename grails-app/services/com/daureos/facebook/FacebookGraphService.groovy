@@ -345,8 +345,16 @@ class FacebookGraphService {
 
 				if (connection.responseCode == 200 || connection.responseCode == 201)
 					resp = connection.content.text
-				else
-				  throw new FacebookGraphException(connection.content.text)
+				else {
+				  def response = connection.getHeaderFields()
+				  def authenticateHeaderResponse = response.get("WWW-Authenticate")
+				  def autneticateError
+				  if (authenticateHeaderResponse != null){
+					autneticateError = authenticateHeaderResponse[0].toString()
+				  }
+				  def errorMessage = connection.content.text + "\n" + autneticateError
+				  throw new FacebookGraphException(errorMessage)
+				}
 			break;
 		}
 
