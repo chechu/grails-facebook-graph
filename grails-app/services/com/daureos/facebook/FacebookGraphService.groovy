@@ -4,7 +4,6 @@ import javax.crypto.Mac
 import javax.crypto.spec.SecretKeySpec
 
 import grails.converters.JSON
-import groovy.json.JsonSlurper
 import org.springframework.web.context.request.RequestContextHolder
 
 /**
@@ -398,7 +397,7 @@ class FacebookGraphService {
 		   payloadSig = computePayloadSignature(payload)
 		   
 		   if (sig.decodeBase64() == payloadSig) {
-			   result = new JsonSlurper().parseText(new String(payload.decodeBase64()))
+			   result = JSON.parse(new String(payload.decodeBase64()))
 		   }
 	   }
 	   return result
