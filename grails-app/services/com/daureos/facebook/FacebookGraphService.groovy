@@ -422,7 +422,9 @@ class FacebookGraphService {
 		def params, resp, now
 		def facebookData = getFacebookData()
 	   
-		if(!facebookData || facebookDataExpiresSoon(facebookData)) {
+		if(!facebookData || 
+			facebookDataOldUser(facebookData, data) ||
+			facebookDataExpiresSoon(facebookData)) {
 			params = [
 				method: 'GET',
 				code: data.code,
@@ -457,6 +459,20 @@ class FacebookGraphService {
 		}
 		
 		return facebookData
+	}
+	
+	/**
+	 * It returns true if the facebookData is associated with the user whose id is
+	 * equals to newData.user_id.
+	 * 
+	 * @param facebookData
+	 * @param newData
+	 * @return
+	 */
+	private boolean facebookDataOldUser(facebookData, newData) {
+		return facebookData.uid && 
+				newData.user_id && 
+				(facebookData.uid != newData.user_id)
 	}
 	
 	/**
